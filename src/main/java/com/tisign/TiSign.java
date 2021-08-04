@@ -52,9 +52,9 @@ public class TiSign {
         String canonicalUri = "/";
         String canonicalQueryString = "";
         // 1.3 拼接关键header信息，包括content-type和根域名host
-        String canonicalHeaders = "content-type:" + this.contentType + "\nhost:" + this.host + "\n";
+        String canonicalHeaders = "content-type:" + this.contentType + "\nhost:" + this.host + "\n" + "x-tc-timestamp:" + this.xtcTimestamp + "\n";
         // 1.4 设置常量签名头字符串
-        String signedHeaders = "content-type;host";
+        String signedHeaders = "content-type;host;x-tc-timestamp";
         // 1.5 对常量payload进行hash计算
         String requestPayload = "";
         String hashedRequestPayload = this.sha256Hex(requestPayload);
