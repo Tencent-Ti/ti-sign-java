@@ -51,7 +51,10 @@ public class TiSign {
         // 1.2 设置常量URI和QueryString
         String canonicalUri = "/";
         String canonicalQueryString = "";
-        // 1.3 拼接关键header信息，包括content-type和根域名host
+        // 1.3 拼接关键header信息，包括content-type、根域名host、请求时间x-tc-timestamp
+        //     生成签名有效期的时间为60分钟
+        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+        this.xtcTimestamp = timestamp;
         String canonicalHeaders = "content-type:" + this.contentType + "\nhost:" + this.host + "\n" + "x-tc-timestamp:" + this.xtcTimestamp + "\n";
         // 1.4 设置常量签名头字符串
         String signedHeaders = "content-type;host;x-tc-timestamp";
@@ -74,8 +77,6 @@ public class TiSign {
 
         // 2. 构造用于计算签名的字符串
         // 2.1 构造请求时间，根据请求header的X-TC-Timestamp字段(unix时间搓，精确到秒)，计算UTC标准日期
-        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
-        this.xtcTimestamp = timestamp;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         String date = sdf.format(new Date(Long.valueOf(timestamp + "000")));
